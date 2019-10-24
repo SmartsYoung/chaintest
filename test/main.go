@@ -27,9 +27,10 @@ func getUser(rw http.ResponseWriter, r *http.Request) {
 	token := &auth.Token{}
 	token.Parse(tokenStr)
 
-	auth ,err := auth.GetAuther(oauth.AuthName)
-	if err == nil {
+	auth, err := auth.GetAuther(oauth.AuthName)
+	if err != nil {
 		fmt.Println("not found AuthName")
+		return
 	}
 	if err := auth.Authenticate(resource, token); err != nil {
 		rw.Header().Set("X-Auth-Url", r.Host+"/v1/oauth/authorize")
@@ -42,8 +43,6 @@ func getUser(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-
-
 func authorize(rw http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		rw.WriteHeader(http.StatusNotFound)
@@ -54,13 +53,13 @@ func authorize(rw http.ResponseWriter, r *http.Request) {
 	password := r.URL.Query().Get("password")
 	log.Println(username, password)
 
-	oauth ,err := auth.GetAuther(oauth.AuthName)
+	oauth, err := auth.GetAuther(oauth.AuthName)
 	if err != nil {
 		fmt.Println("not found AuthName")
 		return
 	}
 
-	token, err := oauth.Authorize(username, password )
+	token, err := oauth.Authorize(username, password)
 	if err != nil {
 		rw.WriteHeader(http.StatusUnauthorized)
 		rw.Write([]byte("Unauthorized"))
