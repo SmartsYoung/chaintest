@@ -3,6 +3,7 @@ package oauth
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/SmartsYoung/chaintest/auth"
 	"golang.org/x/oauth2"
 	"log"
@@ -55,8 +56,9 @@ func stringsCompare(source, destination string) bool {
 }
 
 func (o *OAuth) Authenticate(source string, token *auth.Token) error {
+
 	if strings.Compare(source, token.AccessToken) == 0 {
 		return nil
 	}
-	return nil
+	return errors.New("authenticate failed!")
 }

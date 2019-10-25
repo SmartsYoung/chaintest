@@ -32,16 +32,17 @@ func GetAuther(kind string) (Auther, error) {
 }
 
 type Token struct {
-	AccessToken  string `json:"access_token"`
-	TokenType    string `json:"token_type"`
-	RefreshToken string `json:"refresh_token"`
-	Expiry time.Time `json:"expiry,omitempty"`
-
+	AccessToken  string    `json:"access_token"`
+	TokenType    string    `json:"token_type"`
+	RefreshToken string    `json:"refresh_token"`
+	Expiry       time.Time `json:"expiry,omitempty"`
 }
 
 func (T *Token) Parse(str string) {
+
 }
 
 func (T *Token) Format() string {
-	return ""
+	s := T.AccessToken
+	return s
 }

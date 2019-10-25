@@ -4,15 +4,19 @@ import (
 	"fmt"
 	"github.com/SmartsYoung/chaintest/auth"
 	"github.com/SmartsYoung/chaintest/oauth"
+	"github.com/go-chassis/go-chassis/core/handler"
 	"log"
 	"net/http"
 	"testing"
 )
 
-func TestAuthHandler_Handle(t *testing.T) {
+func TestAuthorize_Handle(t *testing.T) {
 
 	var rw http.ResponseWriter
 	var req *http.Request
+
+	req, _ = http.NewRequest("POST", "http://localhost:8090/v1/oauth/authorize?username=SmartsYoung&password=hitsz_2019", nil)
+
 	username := req.URL.Query().Get("username")
 	password := req.URL.Query().Get("password")
 	log.Println(username, password)
@@ -29,8 +33,16 @@ func TestAuthHandler_Handle(t *testing.T) {
 		rw.Write([]byte("Unauthorized"))
 		return
 	}
-	rw.Header().Set("X-Auth-Token", token.Format())
+	log.Println(token)
+	/*rw.Header().Set("X-Auth-Token", token.Format())
 	rw.WriteHeader(http.StatusOK)
-	rw.Write([]byte("Success"))
+	rw.Write([]byte("Success"))*/
+}
+
+func TestAuthHandler_Handle(t *testing.T) {
+
+	authHandler := newAuthHandler()
+	c := handler.Chain{}
+	c.AddHandler(authHandler)
 
 }
